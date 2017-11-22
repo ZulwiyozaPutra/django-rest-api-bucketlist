@@ -25,16 +25,19 @@ class ModelTestCase(TestCase):
         new_count = Bucketlist.objects.count()
         self.assertNotEqual(old_count, new_count)
 
+    def test_model_returns_readable_representation(self):
+        self.assertEqual(str(self.bucketlist), self.name)
+
 
 class ViewTestCase(TestCase):
 
     def setUp(self):
         user = User.objects.create(
-            username='nerd'
+            username='testuser'
         )
 
         self.client = APIClient()
-        self.client.force_authenticate(user=user)
+        self.client.force_authenticate(user=self.user)
         self.bucketlist_data = {'name': 'Go to Ibiza', 'owner': user.id}
         self.response = self.client.post(
             reverse(viewname='create'),
